@@ -1,7 +1,8 @@
+import { Link } from "react-router";
+
 export default function Landing() {
   return (
     <div className="h-[45vh] w-full">
-
       {/* this is the landing page's background oval element */}
       <div
         className="
@@ -14,16 +15,16 @@ export default function Landing() {
       ></div>
 
       <div className="flex justify-between items-center">
-        <h2>
-          Jot.
-        </h2>
+        <h2>Jot.</h2>
         <div className="flex justify-center items-center">
-          <button className="text-xs w-30 border-none">
-              Login
-          </button>
-          <button className="text-xs w-20 border border-[#352745] shadow-2xl shadow-[#2D2D61]">
+          <Link to="/login">
+            <button className="text-xs w-30 border-none">Login</button>
+          </Link>
+          <Link to="signup">
+            <button className="text-xs w-20 border border-[#352745] shadow-2xl shadow-[#2D2D61]">
               Signup
-          </button>
+            </button>
+          </Link>
         </div>
       </div>
 
@@ -40,18 +41,22 @@ export default function Landing() {
         </div>
 
         <div className="flex justify-center items-center gap-5">
-          <button className="bg-white text-black text-xs w-30 flex justify-center items-center gap-2 shadow-2xl shadow-[#2D2D61]">
-            Try it now
-            <img
-              src="/public/icons/chevron_right_black.svg"
-              alt="chevron right"
-            />
-          </button>
-          <button className="text-xs w-30 border border-[#58489B] shadow-2xl shadow-[#2D2D61]">
-            Register
-          </button>
+          <Link to="/login">
+            <button className="bg-white text-black text-xs w-30 flex justify-center items-center gap-2 shadow-2xl shadow-[#2D2D61]">
+              Try it now
+              <img
+                src="/public/icons/chevron_right_black.svg"
+                alt="chevron right"
+              />
+            </button>
+          </Link>
+          <Link className="flex justify-center items-center" to="/signup">
+            <button className="text-xs w-30 border border-[#58489B] shadow-2xl shadow-[#2D2D61]">
+              Register
+            </button>
+          </Link>
         </div>
-        
+
         {/* this is the landing page's image */}
         <div className="absolute top-[42%]">
           <img width="850px" src="/public/images/sample.png"></img>

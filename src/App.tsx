@@ -1,13 +1,9 @@
-import './App.css'
-import Landing from './components/Landing/Landing'
+import { RouterProvider } from "react-router";
+import "./App.css";
+import router from "./routes/routes";
 
 function App() {
-
-  return (
-    <>
-     <Landing />
-    </>
-  )
+  return <RouterProvider router={router} />;
 }
 
-export default App
+export default App;
