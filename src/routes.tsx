@@ -1,7 +1,8 @@
 import { createBrowserRouter } from "react-router";
-import Landing from "../components/Landing/Landing";
-import Login from "../components/Form/AuthForm/LoginForm";
-import Signup from "../components/Form/AuthForm/SignupForm";
+import Login from "./ui/Form/AuthForm/LoginForm";
+import Landing from "./ui/Landing/Landing";
+import Signup from "./ui/Form/AuthForm/SignupForm";
+
 
 const router = createBrowserRouter([
   {

@@ -4,18 +4,23 @@ import InputField from "../components/InputField";
 import AuthForm from "./AuthForm";
 import Button from "../components/Button";
 import { Link } from "react-router";
+import {
+  ILoginResponse,
+  ILoginState,
+  LoginPayloadType,
+} from "../../../core/types/auth/login.types";
+import { apiPostRequest } from "../../../core/utils/request.utils";
+import {
+  ApiErrorResponse,
+  ApiSucessResponse,
+} from "../../../core/types/api/response";
+import { asyncResponseErrorHandler } from "../../../core/errors/errors";
+import toast from "react-hot-toast";
 
-interface SignupState {
-  username: string;
-  password: string;
-  confirm_password: string;
-  error: string[] | string | null;
-}
-export default function Signup() {
-  const [formData, setFormData] = useState<SignupState>({
-    username: "",
+export default function Login() {
+  const [formData, setFormData] = useState<ILoginState>({
+    email: "",
     password: "",
-    confirm_password: "",
     error: null,
   });
 
@@ -28,8 +33,24 @@ export default function Signup() {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const payload: LoginPayloadType = {
+      email: formData.email,
+      password: formData.password,
+    };
+
+    const response = await apiPostRequest<
+      LoginPayloadType,
+      ApiErrorResponse | ApiSucessResponse<ILoginResponse>
+    >("auth/login", payload);
+
+    if (!response.success) {
+      const errors = asyncResponseErrorHandler(response);
+      for (const err of errors) {
+        toast(err);
+      }
+    }
   };
 
   return (
@@ -37,19 +58,20 @@ export default function Signup() {
       <>
         <div>
           <h1 className="bg-clip-text text-transparent bg-gradient-to-r from-violet-900 to-[#826684]">
-            Create <br />
-            Account.
+            Welcome <br />
+            back.
           </h1>
         </div>
         <Form onSubmit={handleSubmit}>
           <div className="flex justify-center items-center flex-col gap-4">
             <InputField
-              name="username"
-              value={formData.username}
+              name="email"
+              type="email"
+              value={formData.email}
               onChange={handleInputChange}
-              placeholder="Username"
+              placeholder="Email"
             >
-              <img src="/public/icons/person.svg" />
+              <img src="/public/icons/mail.svg" />
             </InputField>
             <InputField
               name="password"
@@ -59,25 +81,17 @@ export default function Signup() {
             >
               <img src="/public/icons/lock.svg" />
             </InputField>
-            <InputField
-              name="confirm_password"
-              value={formData.confirm_password}
-              onChange={handleInputChange}
-              placeholder="Confirm Password"
-            >
-              <img src="/public/icons/check.svg" />
-            </InputField>
-            <Button>Signup</Button>
+            <Button>Login</Button>
 
             <p>
               <span className="text-[#454545]">
-                Already have an account? &nbsp;
+                Don't have an account yet? &nbsp;
               </span>
               <Link
                 className="bg-clip-text text-transparent bg-gradient-to-r from-violet-900 to-[#826684]"
-                to="/login"
+                to="/signup"
               >
-                Login.
+                Signup.
               </Link>
             </p>
           </div>
