@@ -2,7 +2,7 @@ import { Link } from "react-router";
 
 export default function Landing() {
   return (
-    <div className="h-[45vh] w-full">
+    <div className="h-[45vh]">
       {/* this is the landing page's background oval element */}
       <div
         className="
