@@ -5,6 +5,8 @@ import Signup from "./ui/Form/AuthForm/SignupForm";
 import Discover from "./ui/Discover/Discover";
 import ProtectedRoute from "./Protected";
 import AuthProvider from "./core/context/auth.context";
+import CreateJot from "./ui/CreateJot/CreateJot";
+import NotFoundError from "./ui/Errors/NotFoundError";
 
 const router = createBrowserRouter([
   {
@@ -26,16 +28,21 @@ const router = createBrowserRouter([
       },
 
       {
-        path: "/discover",
+        path: "/client",
         element: <ProtectedRoute />,
         children: [
           {
-            path: "",
+            path: "discover",
             element: <Discover />,
+          },
+          {
+            path: "create",
+            element: <CreateJot />,
           },
         ],
       },
     ],
+    errorElement: <NotFoundError />
   },
 ]);
 

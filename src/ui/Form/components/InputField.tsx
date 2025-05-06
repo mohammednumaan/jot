@@ -5,7 +5,7 @@ interface InputFieldProps {
   type?: string;
   value: string;
   placeholder: string;
-  children: React.ReactNode;
+  children?: React.ReactNode;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -19,7 +19,7 @@ export default function InputField({
 }: InputFieldProps) {
   return (
     <label className=" flex justify-center items-center gap-2 p-2 w-[100%] bg-[#181818] rounded-md">
-      {children}
+      {children && children}
       <input
         name={name}
         type={type}

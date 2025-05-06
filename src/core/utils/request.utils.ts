@@ -35,7 +35,6 @@ export async function apiPostRequest<PayloadType, ResponseType>(
     );
 
     const responseData: ResponseType = await response.json();
-
     return responseData;
   } catch (error) {
     throw error;

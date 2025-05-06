@@ -25,7 +25,7 @@ export default function AuthProvider() {
       >("auth/status");
       if (response.success) {
         setIsAuthenticated(response.data.status);
-        navigate("/discover");
+        navigate("/client/discover");
       }
     }
 

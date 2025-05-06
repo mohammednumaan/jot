@@ -16,6 +16,10 @@ export function asyncResponseErrorHandler(response: ApiErrorResponse) {
         })
       }
       break;
+
+    case 500:
+      errorMsgs.push(response.message);
+      break;
   }
 
   return errorMsgs;
