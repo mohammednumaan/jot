@@ -3,6 +3,7 @@ import useFetch from "../../core/hooks/fetch.hook";
 import { AllJotsResponse } from "../../core/types/jot/jots";
 import Editor from "../Editor/Editor";
 import JotSkeleton from "../Skeleton/Skeleton";
+import Pagination from "../Pagination/Pagination";
 
 export default function Discover() {
   const { data, loading, error } = useFetch<AllJotsResponse>("jots/");
@@ -35,6 +36,9 @@ export default function Discover() {
               />
             </div>
           ))}
+      </div>
+      <div className="mt-5 mb-5">
+        <Pagination totalPages={4} />
       </div>
     </div>
   );
