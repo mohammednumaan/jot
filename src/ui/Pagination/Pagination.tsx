@@ -1,14 +1,85 @@
 import { useState } from "react";
 import PageItem from "./PageItem";
+import rangeArray from "../../core/utils/range.utils";
 
 export default function Pagination({ totalPages }: { totalPages: number }) {
   const [page, setPage] = useState(1);
 
   const lastPage = totalPages;
-  const pageRange = Array.from({ length: lastPage - 2 }, (_, i) => i + 2);
+
+  const computePageNumbers = () => {
+    const DOTS = "DOTS";
+    const totalPageCount = totalPages;
+    const currentPage = page;
+    const pageNeighbours = 1;
+
+    /* this variable stores the total page numbers that will be visible
+       to the user for navigation, this includes:
+       1. the first page.
+       2. the last page.
+       3. the page in the middle
+       4. the neighbouring page from the middle
+    */
+    const totalNumbers = pageNeighbours * 2 + 3;
+
+    // this includes the number of li elements to display
+    // I add 2 here because im including the next and prev li elements as well
+    const totalBlocks = totalNumbers + 2;
+    console.log(totalBlocks, totalNumbers);
+
+    if (totalPages > totalBlocks) {
+      const startPage = Math.max(2, currentPage - pageNeighbours);
+      const endPage = Math.min(
+        totalPageCount - 1,
+        currentPage + pageNeighbours
+      );
+      let pages: (number | "DOTS")[] = rangeArray(startPage, endPage);
+
+      const hasLeftSpill = startPage > 2;
+      const hasRightSpill = totalPages - endPage > 1;
+      const spillOffset = totalNumbers - (pages.length + 1);
+
+      console.log(
+        totalNumbers,
+        totalBlocks,
+        startPage,
+        endPage,
+        hasLeftSpill,
+        hasRightSpill,
+        spillOffset
+      );
+
+      switch (true) {
+        case hasLeftSpill && !hasRightSpill: {
+          const extraPages = rangeArray(startPage - spillOffset, startPage - 1);
+          console.log(extraPages);
+
+          pages = [DOTS, ...extraPages, ...pages];
+          break;
+        }
+
+        case !hasLeftSpill && hasRightSpill: {
+          const extraPages = rangeArray(endPage + 1, endPage + spillOffset);
+          pages = [...pages, ...extraPages, DOTS];
+          break;
+        }
+
+        case hasLeftSpill && hasRightSpill:
+        default: {
+          pages = [DOTS, ...pages, DOTS];
+          break;
+        }
+      }
+
+      return [1, ...pages, totalPages];
+    } else {
+      return rangeArray(1, totalPageCount);
+    }
+  };
+
+  const pageRange = computePageNumbers();
 
   const goNextPage = () => {
-    if (page === lastPage) return;
     setPage(page + 1);
   };
 
@@ -28,40 +99,30 @@ export default function Pagination({ totalPages }: { totalPages: number }) {
         <li className={"rounded-md cursor-pointer"} onClick={goPrevPage}>
           <img src="/public/icons/back_arrow.svg" alt="previous page" />
         </li>
-        {/* this is the first page li element */}
-        <li
-          className={`px-4 py-2 rounded-md cursor-pointer ${
-            page === 1 ? "bg-[#44316e]" : "bg-[#0f0f0f]"
-          }`}
-          onClick={() => goToPage(1)}
-        >
-          {1}
-        </li>
 
-        {pageRange.map((pageNumber) => {
-          return (
-            <PageItem
-              pageNumber={pageNumber}
-              currentPage={page}
-              onPageChange={goToPage}
-            >
-              {pageNumber}
-            </PageItem>
-          );
+        {pageRange.map((pageNumber, index) => {
+          if (pageNumber === "DOTS") {
+            return (
+              <li
+                key={index}
+                className="tracking-[6px] rounded-md cursor-pointer text-xl"
+              >
+                ...
+              </li>
+            );
+          } else {
+            return (
+              <PageItem
+                pageNumber={pageNumber}
+                currentPage={page}
+                onPageChange={goToPage}
+              >
+                {pageNumber}
+              </PageItem>
+            );
+          }
         })}
-
-        {/* this is the last page li element */}
-        <li
-          className={`px-4 py-2 rounded-md cursor-pointer ${
-            page === lastPage ? "bg-[#44316e]" : "bg-[#0f0f0f]"
-          }`}
-          onClick={() => goToPage(lastPage)}
-        >
-          {lastPage}
-        </li>
-
         {/* this is the next li element */}
-
         <li className={"rounded-md cursor-pointer "} onClick={goNextPage}>
           <img src="/public/icons/front_arrow.svg" alt="next page" />
         </li>

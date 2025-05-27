@@ -38,7 +38,7 @@ export default function Discover() {
           ))}
       </div>
       <div className="mt-5 mb-5">
-        <Pagination totalPages={4} />
+        <Pagination totalPages={20} />
       </div>
     </div>
   );
