@@ -4,13 +4,36 @@ import { AllJotsResponse } from "../../core/types/jot/jots";
 import Editor from "../Editor/Editor";
 import JotSkeleton from "../Skeleton/Skeleton";
 import Pagination from "../Pagination/Pagination";
+import { useState } from "react";
 
 export default function Discover() {
-  const { data, loading, error } = useFetch<AllJotsResponse>("jots/");
+  const [currentPage, setCurrentPage] = useState(1);
+  const { data, loading, error } = useFetch<AllJotsResponse>(
+    `jots/?page=${currentPage}`
+  );
 
   if (error) {
     error.map((err) => toast(err));
   }
+
+  const goToNextPage = (page: number) => {
+    if (currentPage === data?.pagination.totalPages) {
+      return;
+    }
+    setCurrentPage(page + 1);
+  };
+
+  const goToPrevPage = (page: number) => {
+    if (currentPage === 1) {
+      return;
+    }
+    setCurrentPage(page - 1);
+  };
+
+  const goToPage = (page: number) => {
+    setCurrentPage(page);
+  };
+
   return (
     <div>
       {error && (
@@ -37,9 +60,18 @@ export default function Discover() {
             </div>
           ))}
       </div>
-      <div className="mt-5 mb-5">
-        <Pagination totalPages={20} />
-      </div>
+
+      {data?.pagination && (
+        <div className="mt-5 mb-5">
+          <Pagination
+            page={currentPage}
+            totalPages={data.pagination.totalPages}
+            goToNextPage={goToNextPage}
+            goToPage={goToPage}
+            goToPrevPage={goToPrevPage}
+          />
+        </div>
+      )}
     </div>
   );
 }

@@ -8,6 +8,12 @@ export interface IJot {
     jotGroupId: string
 }
 
+export interface IPagination {
+    page: number;
+    size: number;
+    totalPages: number;
+}
 export interface AllJotsResponse {
     jots: IJot[];
+    pagination: IPagination
 }

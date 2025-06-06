@@ -2,10 +2,17 @@ import { useState } from "react";
 import PageItem from "./PageItem";
 import rangeArray from "../../core/utils/range.utils";
 
-export default function Pagination({ totalPages }: { totalPages: number }) {
-  const [page, setPage] = useState(1);
 
-  const lastPage = totalPages;
+interface PaginationProps {
+  page: number;
+  totalPages: number;
+  goToPage: (page: number) => void;
+  goToNextPage: (page: number) => void;
+  goToPrevPage: (page: number) => void;
+  
+}
+export default function Pagination({ page, totalPages, goToPage, goToNextPage, goToPrevPage }: PaginationProps) {
+
 
   const computePageNumbers = () => {
     const DOTS = "DOTS";
@@ -25,7 +32,6 @@ export default function Pagination({ totalPages }: { totalPages: number }) {
     // this includes the number of li elements to display
     // I add 2 here because im including the next and prev li elements as well
     const totalBlocks = totalNumbers + 2;
-    console.log(totalBlocks, totalNumbers);
 
     if (totalPages > totalBlocks) {
       const startPage = Math.max(2, currentPage - pageNeighbours);
@@ -79,24 +85,12 @@ export default function Pagination({ totalPages }: { totalPages: number }) {
 
   const pageRange = computePageNumbers();
 
-  const goNextPage = () => {
-    setPage(page + 1);
-  };
-
-  const goPrevPage = () => {
-    if (page === 1) return;
-    setPage(page - 1);
-  };
-
-  const goToPage = (page: number) => {
-    setPage(page);
-  };
 
   return (
     <div className="flex justify-center items-center">
       <ul className="flex justify-center items-center gap-6">
         {/* this is the previous li element */}
-        <li className={"rounded-md cursor-pointer"} onClick={goPrevPage}>
+        <li className={"rounded-md cursor-pointer"} onClick={()  => goToPrevPage(page)}>
           <img src="/public/icons/back_arrow.svg" alt="previous page" />
         </li>
 
@@ -123,7 +117,7 @@ export default function Pagination({ totalPages }: { totalPages: number }) {
           }
         })}
         {/* this is the next li element */}
-        <li className={"rounded-md cursor-pointer "} onClick={goNextPage}>
+        <li className={"rounded-md cursor-pointer "} onClick={() => goToNextPage(page)}>
           <img src="/public/icons/front_arrow.svg" alt="next page" />
         </li>
       </ul>
