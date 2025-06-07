@@ -1,5 +1,10 @@
+export interface IJotPayload {
+  id: string;
+  name: string;
+  content: string;
+}
+
 export interface IJotState {
-    name: string,
-    content: string,
-    description: string | null
+  jots: IJotPayload[];
+  description: string | null;
 }

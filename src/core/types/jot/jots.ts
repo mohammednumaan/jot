@@ -13,6 +13,7 @@ export interface IPagination {
     size: number;
     totalPages: number;
 }
+
 export interface AllJotsResponse {
     jots: IJot[];
     pagination: IPagination

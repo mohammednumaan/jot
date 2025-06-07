@@ -14,6 +14,7 @@ const AuthContext = createContext<ProviderProps>({
   setIsAuthenticated: () => {},
 });
 
+
 export default function AuthProvider() {
   const navigate = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
