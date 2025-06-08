@@ -46,12 +46,16 @@ export default function CreateJot() {
     const value = e.target.value;
 
     const updatedEditor = { ...selectedJot, [key]: value };
-    const newEditors = editors.map((editor) => {
+    console.log(updatedEditor);
+
+    const newEditors = [...editors].map((editor) => {
       if (editor.id === selectedJot.id) {
-        editor = selectedJot;
+        editor = updatedEditor;
       }
+
       return editor;
     });
+
     setEditors(newEditors);
     setSelectedJot(updatedEditor);
   };
@@ -148,7 +152,11 @@ export default function CreateJot() {
 
       <div className="flex justify-between items-center mt-4">
         <div className="w-full flex justify-start">
-          <Button onClick={handleAddEditor} width={"20%"} imagePath="/public/icons/add_black.svg">
+          <Button
+            onClick={handleAddEditor}
+            width={"20%"}
+            imagePath="/public/icons/add_black.svg"
+          >
             Add File
           </Button>
         </div>
