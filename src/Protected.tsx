@@ -3,6 +3,9 @@ import { useAuth } from "./core/context/auth.context";
 import Layout from "./ui/Layout/Layout";
 
 export default function ProtectedRoute() {
-  const { isAuthenticated } = useAuth();
-  return isAuthenticated ? <Layout /> : <Navigate to="/" replace={true} />;
+  const { isAuthenticated, loading } = useAuth();
+  if (loading) {
+    return <></>;
+  }
+  return isAuthenticated ? <Layout /> : <Navigate to="/login" replace={true} />;
 }

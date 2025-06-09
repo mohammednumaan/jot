@@ -54,7 +54,7 @@ export default function Login() {
       }
     } else {
       setIsAuthenticated(true);
-      navigate("/discover");
+      navigate("/client/discover");
     }
   };
 
