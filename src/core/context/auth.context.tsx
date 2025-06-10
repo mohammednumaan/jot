@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { Outlet, useLocation, useNavigate } from "react-router";
+import { Outlet } from "react-router";
 import { apiGetRequest } from "../utils/request.utils";
 import { IAuthenticatedStatus } from "../types/auth/login.types";
 import { ApiErrorResponse, ApiSucessResponse } from "../types/api/response";
