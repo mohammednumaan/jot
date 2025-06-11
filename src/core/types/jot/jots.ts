@@ -1,4 +1,5 @@
 export interface IJot {
+  id: string;
   name: string;
   extension: string;
   description: string | null;

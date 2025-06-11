@@ -54,7 +54,7 @@ export default function Discover() {
         {data?.jots &&
           data.jots.length > 0 &&
           data.jots.map((jot) => (
-            <div className="flex gap-5 flex-col w-full">
+            <div key={jot.id}  className="flex gap-5 flex-col w-full">
               {/* this is the jot's header metadata (name, number of files, etc) */}
               <div className="flex justify-between">
                 {/* this is the left side of the header metadata */}
@@ -67,7 +67,7 @@ export default function Discover() {
                       <p className="text-xl text-[#543A8B]">{jot.owner.name}</p>
                     </Link>
                     <p className="text-xl text-[#543A8B]">/</p>
-                    <Link className="hover:underline" to={`/client/jot/${jot.name}`}>
+                    <Link className="hover:underline" to={`/client/${jot.owner.name}/${jot.jotGroup.id}`}>
                       <p className="text-xl text-[#543A8B]">
                         {jot.name + "." + jot.extension}
                       </p>

@@ -1,4 +1,3 @@
-import { useState } from "react";
 import PageItem from "./PageItem";
 import rangeArray from "../../core/utils/range.utils";
 
@@ -106,7 +105,8 @@ export default function Pagination({ page, totalPages, goToPage, goToNextPage, g
             );
           } else {
             return (
-              <PageItem
+              <PageItem 
+                key={pageNumber}
                 pageNumber={pageNumber}
                 currentPage={page}
                 onPageChange={goToPage}

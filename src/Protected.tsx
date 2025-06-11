@@ -4,6 +4,7 @@ import Layout from "./ui/Layout/Layout";
 
 export default function ProtectedRoute() {
   const { isAuthenticated, loading } = useAuth();
+
   if (loading) {
     return <></>;
   }

@@ -7,6 +7,7 @@ import ProtectedRoute from "./Protected";
 import AuthProvider from "./core/context/auth.context";
 import CreateJot from "./ui/CreateJot/CreateJot";
 import NotFoundError from "./ui/Errors/NotFoundError";
+import JotView from "./ui/JotView/JotView";
 
 const router = createBrowserRouter([
   {
@@ -39,6 +40,10 @@ const router = createBrowserRouter([
             path: "create",
             element: <CreateJot />,
           },
+          {
+            path: ":name/:jotGroupId",
+            element: <JotView />
+          }
         ],
       },
     ],
