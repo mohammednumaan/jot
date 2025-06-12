@@ -12,13 +12,16 @@ export default function JotView() {
 
   const jots = data?.jots;
 
+  if (loading){
+    console.log('loading');
+  }
+
   if (error) {
     error.map((err) => toast(err));
   }
 
   const handleCopy = async (content: string) => {
     try {
-      console.log(content);
 
       await navigator.clipboard.writeText(content);
       toast("Copied contents to clipboard.")

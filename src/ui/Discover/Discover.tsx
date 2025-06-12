@@ -14,6 +14,7 @@ export default function Discover() {
     `jots/?page=${currentPage}`
   );
 
+
   if (error) {
     error.map((err) => toast(err));
   }
@@ -62,12 +63,12 @@ export default function Discover() {
                   <div className="flex gap-2">
                     <Link
                       className="hover:underline"
-                      to={`/client/profile/${jot.owner.id}`}
+                      to={`/profile/${jot.owner.id}`}
                     >
                       <p className="text-xl text-[#543A8B]">{jot.owner.name}</p>
                     </Link>
                     <p className="text-xl text-[#543A8B]">/</p>
-                    <Link className="hover:underline" to={`/client/${jot.owner.name}/${jot.jotGroup.id}`}>
+                    <Link className="hover:underline" to={`/${jot.owner.name}/${jot.jotGroup.id}`}>
                       <p className="text-xl text-[#543A8B]">
                         {jot.name + "." + jot.extension}
                       </p>

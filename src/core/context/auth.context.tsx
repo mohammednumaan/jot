@@ -20,13 +20,11 @@ export default function AuthProvider() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
 
-
   useEffect(() => {
-
     async function fetchUserAuthenticationStatus() {
 
-      try{
-        setLoading(true)
+      try {
+        setLoading(true);
         const response = await apiGetRequest<
           ApiErrorResponse | ApiSucessResponse<IAuthenticatedStatus>
         >("auth/status");
@@ -34,20 +32,24 @@ export default function AuthProvider() {
           setIsAuthenticated(response.data.status);
         }
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
     }
 
-    fetchUserAuthenticationStatus();
+    if (!isAuthenticated) fetchUserAuthenticationStatus();
   }, [isAuthenticated]);
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, loading, setIsAuthenticated }}>
+    <AuthContext.Provider
+      value={{ isAuthenticated, loading, setIsAuthenticated }}
+    >
       <Outlet />
     </AuthContext.Provider>
   );
 }
 
 export function useAuth() {
+  console.log("useAuth invoked");
+
   return useContext(AuthContext);
 }

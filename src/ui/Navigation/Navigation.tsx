@@ -10,12 +10,12 @@ export default function Navigation() {
       {/* this is the navigation links (links to profile and new jot creation) */}
       <div className="flex justify-center items-center gap-10">
         <div title="Discover Jots">
-          <Link to="/client/discover">
+          <Link to="/discover">
             <img src="/public/icons/explore.svg" />
           </Link>
         </div>
         <div title="Create Jot">
-          <Link to="/client/create">
+          <Link to="/create">
             <img src="/public/icons/create.svg" />
           </Link>
         </div>

@@ -3,7 +3,7 @@ import Form from "../components/Form";
 import InputField from "../components/InputField";
 import AuthForm from "./AuthForm";
 import Button from "../components/Button";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import {
   ISignupResponse,
   ISignupState,
@@ -18,6 +18,7 @@ import { asyncResponseErrorHandler } from "../../../core/errors/errors";
 import toast from "react-hot-toast";
 
 export default function Signup() {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState<ISignupState>({
     email: "",
     username: "",
@@ -54,6 +55,8 @@ export default function Signup() {
       for (const err of errors){
         toast(err)
       }
+    } else{
+      navigate("/login");
     }
   };
 

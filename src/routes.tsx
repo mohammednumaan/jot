@@ -8,6 +8,7 @@ import AuthProvider from "./core/context/auth.context";
 import CreateJot from "./ui/CreateJot/CreateJot";
 import NotFoundError from "./ui/Errors/NotFoundError";
 import JotView from "./ui/JotView/JotView";
+import PublicRoute from "./Public";
 
 const router = createBrowserRouter([
   {
@@ -16,39 +17,58 @@ const router = createBrowserRouter([
     children: [
       {
         path: "",
-        element: <Landing />,
+        element: (
+          <PublicRoute>
+            <Landing />
+          </PublicRoute>
+        ),
       },
       {
         path: "/login",
-        element: <Login />,
+        element: (
+          <PublicRoute>
+            <Login />
+          </PublicRoute>
+        ),
       },
 
       {
         path: "/signup",
-        element: <Signup />,
+        element: (
+          <PublicRoute>
+            <Signup />
+          </PublicRoute>
+        )
       },
 
       {
-        path: "/client",
-        element: <ProtectedRoute />,
-        children: [
-          {
-            path: "discover",
-            element: <Discover />,
-          },
-          {
-            path: "create",
-            element: <CreateJot />,
-          },
-          {
-            path: ":name/:jotGroupId",
-            element: <JotView />
-          }
-        ],
+        path: "/discover",
+        element: (
+          <ProtectedRoute>
+            <Discover />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/create",
+        element: (
+          <ProtectedRoute>
+            <CreateJot />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/:name/:jotGroupId",
+        element: (
+          <ProtectedRoute>
+            <JotView />
+          </ProtectedRoute>
+        ),
       },
     ],
-    errorElement: <NotFoundError />
+    errorElement: <NotFoundError />,
   },
+  // },
 ]);
 
 export default router;
