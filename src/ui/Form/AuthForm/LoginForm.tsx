@@ -22,7 +22,7 @@ export default function Login() {
   const { setIsAuthenticated } = useAuth();
   const navigate = useNavigate();
   const [formData, setFormData] = useState<ILoginState>({
-    email: "",
+    username: "",
     password: "",
     error: null,
   });
@@ -39,7 +39,7 @@ export default function Login() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const payload: LoginPayloadType = {
-      email: formData.email,
+      username: formData.username,
       password: formData.password,
     };
     const response = await apiPostRequest<
@@ -70,13 +70,12 @@ export default function Login() {
         <Form onSubmit={handleSubmit}>
           <div className="flex justify-center items-center flex-col gap-4">
             <InputField
-              name="email"
-              type="email"
-              value={formData.email}
+              name="username"
+              value={formData.username}
               onChange={handleInputChange}
-              placeholder="Email"
+              placeholder="Username"
             >
-              <img src="/public/icons/mail.svg" />
+              <img src="/public/icons/person.svg" />
             </InputField>
             <InputField
               name="password"

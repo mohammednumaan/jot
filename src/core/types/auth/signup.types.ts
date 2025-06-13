@@ -1,5 +1,4 @@
 export interface ISignupState {
-  email: string;
   username: string;
   password: string;
   confirm_password: string;
@@ -7,7 +6,6 @@ export interface ISignupState {
 }
 
 export interface ISignupResponse {
-  email: string,
   username: string,
   avatar: string,
   joinedAt: Date

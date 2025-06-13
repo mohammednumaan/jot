@@ -20,7 +20,6 @@ import toast from "react-hot-toast";
 export default function Signup() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState<ISignupState>({
-    email: "",
     username: "",
     password: "",
     confirm_password: "",
@@ -39,7 +38,6 @@ export default function Signup() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const payload: SignupPayloadType = {
-      email: formData.email,
       username: formData.username,
       password: formData.password,
       confirm_password: formData.confirm_password,
@@ -71,15 +69,6 @@ export default function Signup() {
         </div>
         <Form onSubmit={handleSubmit}>
           <div className="flex justify-center items-center flex-col gap-4">
-            <InputField
-              name="email"
-              type="email"
-              value={formData.email}
-              onChange={handleInputChange}
-              placeholder="Email"
-            >
-              <img src="/public/icons/mail.svg" />
-            </InputField>
             <InputField
               name="username"
               value={formData.username}

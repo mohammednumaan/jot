@@ -19,7 +19,7 @@ const AuthContext = createContext<ProviderProps>({
 export default function AuthProvider() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
-
+  
   useEffect(() => {
     async function fetchUserAuthenticationStatus() {
 
@@ -49,7 +49,6 @@ export default function AuthProvider() {
 }
 
 export function useAuth() {
-  console.log("useAuth invoked");
 
   return useContext(AuthContext);
 }

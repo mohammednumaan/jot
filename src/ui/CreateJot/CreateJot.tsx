@@ -90,10 +90,12 @@ export default function CreateJot() {
         toast(err);
       }
     } else {
-      toast.success("Jot created successfully!");
+      toast.success(
+        "Jot created successfully, Redirecting to Discover Page..."
+      );
       setTimeout(() => {
-        navigate("/client/discover");
-      }, 3500);
+        navigate("/discover");
+      }, 1500);
     }
   };
 

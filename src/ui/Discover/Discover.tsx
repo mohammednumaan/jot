@@ -7,6 +7,7 @@ import Pagination from "../Pagination/Pagination";
 import { useState } from "react";
 import { formatDistanceToNowStrict } from "date-fns";
 import { Link } from "react-router";
+import Button from "../Form/components/Button";
 
 export default function Discover() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -14,6 +15,7 @@ export default function Discover() {
     `jots/?page=${currentPage}`
   );
 
+  console.log(`discover component render: data:${data}, loading:${loading}`);
 
   if (error) {
     error.map((err) => toast(err));
@@ -36,7 +38,7 @@ export default function Discover() {
   const goToPage = (page: number) => {
     setCurrentPage(page);
   };
-  
+
   return (
     <div>
       {error && (
@@ -51,11 +53,27 @@ export default function Discover() {
           ))}
         </div>
       )}
+
+      {data?.jots.length === 0 && (
+        <div className="h-[80vh] w-[100%] flex flex-col justify-center items-center gap-5">
+          <p className=" text-4xl flex justify-center items-center">
+            No Jots found. Start by creating one.
+          </p>
+          <Link className="w-[57%]"
+            to="/create">
+            <Button imagePath="/public/icons/add_black.svg">
+              Create Jot
+            </Button>
+          </Link>
+        </div>
+      )}
       <div className="flex justify-center items-center flex-col gap-5">
-        {data?.jots &&
+        {!loading &&
+          !error &&
+          data?.jots &&
           data.jots.length > 0 &&
           data.jots.map((jot) => (
-            <div key={jot.id}  className="flex gap-5 flex-col w-full">
+            <div key={jot.id} className="flex gap-5 flex-col w-full">
               {/* this is the jot's header metadata (name, number of files, etc) */}
               <div className="flex justify-between">
                 {/* this is the left side of the header metadata */}
@@ -68,7 +86,10 @@ export default function Discover() {
                       <p className="text-xl text-[#543A8B]">{jot.owner.name}</p>
                     </Link>
                     <p className="text-xl text-[#543A8B]">/</p>
-                    <Link className="hover:underline" to={`/${jot.owner.name}/${jot.jotGroup.id}`}>
+                    <Link
+                      className="hover:underline"
+                      to={`/${jot.owner.name}/${jot.jotGroup.id}`}
+                    >
                       <p className="text-xl text-[#543A8B]">
                         {jot.name + "." + jot.extension}
                       </p>
@@ -107,7 +128,7 @@ export default function Discover() {
           ))}
       </div>
 
-      {data?.pagination && (
+      {loading && !error && data?.pagination && (
         <div className="mt-5 mb-5">
           <Pagination
             page={currentPage}

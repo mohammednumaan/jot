@@ -1,12 +1,11 @@
 export interface IUser {
-  email: string;
   username: string;
   avatar: string;
   joinedAt: Date;
 }
 
 export interface ILoginState {
-  email: string;
+  username: string;
   password: string;
   error: string[] | string | null;
 }
