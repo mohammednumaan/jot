@@ -14,8 +14,9 @@ export interface ILoginResponse {
   user: IUser;
 }
 
-export interface IAuthenticatedStatus {
+export interface IAuthenticationStatusResponse {
   status: boolean;
+  username: string | null;
 }
 
 export type LoginPayloadType = Omit<ILoginState, "error">;

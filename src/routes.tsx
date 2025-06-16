@@ -9,6 +9,7 @@ import CreateJot from "./ui/CreateJot/CreateJot";
 import NotFoundError from "./ui/Errors/NotFoundError";
 import JotView from "./ui/JotView/JotView";
 import PublicRoute from "./Public";
+import Profile from "./ui/Profile/Profile";
 
 const router = createBrowserRouter([
   {
@@ -54,6 +55,14 @@ const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <CreateJot />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/profile",
+        element: (
+          <ProtectedRoute>
+            <Profile />
           </ProtectedRoute>
         ),
       },

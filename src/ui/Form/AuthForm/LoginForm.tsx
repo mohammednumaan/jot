@@ -19,7 +19,7 @@ import toast from "react-hot-toast";
 import { useAuth } from "../../../core/context/auth.context";
 
 export default function Login() {
-  const { setIsAuthenticated } = useAuth();
+  const { setAuth } = useAuth();
   const navigate = useNavigate();
   const [formData, setFormData] = useState<ILoginState>({
     username: "",
@@ -53,7 +53,7 @@ export default function Login() {
         toast(err);
       }
     } else {
-      setIsAuthenticated(true);
+      setAuth({ isAuthenticated: true, username: response.data.user.username });
       navigate("/discover");
     }
   };

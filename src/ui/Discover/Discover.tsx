@@ -103,7 +103,7 @@ export default function Discover() {
 
                 {/* this is the right side of the header metadata */}
                 <div>
-                  <div className=" flex gap-2">
+                  <div className="flex gap-2">
                     <img
                       src={"/public/icons/code_block.svg"}
                       alt="code block icon"

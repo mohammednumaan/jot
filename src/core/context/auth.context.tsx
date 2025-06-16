@@ -1,47 +1,63 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { Outlet } from "react-router";
 import { apiGetRequest } from "../utils/request.utils";
-import { IAuthenticatedStatus } from "../types/auth/login.types";
+import { IAuthenticationStatusResponse } from "../types/auth/login.types";
 import { ApiErrorResponse, ApiSucessResponse } from "../types/api/response";
 
+interface ProviderState {
+  isAuthenticated: boolean;
+  username: string | null;
+}
 interface ProviderProps {
+  username: string | null;
   isAuthenticated: boolean;
   loading: boolean;
-  setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
+  setAuth: React.Dispatch<React.SetStateAction<ProviderState>>;
 }
 
 const AuthContext = createContext<ProviderProps>({
+  username: null,
   isAuthenticated: false,
   loading: true,
-  setIsAuthenticated: () => {},
+  setAuth: () => {},
 });
 
 export default function AuthProvider() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [auth, setAuth] = useState<ProviderState>({
+    isAuthenticated: false,
+    username: null,
+  });
   const [loading, setLoading] = useState(true);
-  
+
   useEffect(() => {
     async function fetchUserAuthenticationStatus() {
-
       try {
         setLoading(true);
         const response = await apiGetRequest<
-          ApiErrorResponse | ApiSucessResponse<IAuthenticatedStatus>
+          ApiErrorResponse | ApiSucessResponse<IAuthenticationStatusResponse>
         >("auth/status");
         if (response.success) {
-          setIsAuthenticated(response.data.status);
+          setAuth({
+            isAuthenticated: response.data.status,
+            username: response.data.username,
+          });
         }
       } finally {
         setLoading(false);
       }
     }
 
-    if (!isAuthenticated) fetchUserAuthenticationStatus();
-  }, [isAuthenticated]);
+    if (!auth.isAuthenticated) fetchUserAuthenticationStatus();
+  }, [auth.isAuthenticated]);
 
   return (
     <AuthContext.Provider
-      value={{ isAuthenticated, loading, setIsAuthenticated }}
+      value={{
+        isAuthenticated: auth.isAuthenticated,
+        username: auth.username,
+        loading,
+        setAuth,
+      }}
     >
       <Outlet />
     </AuthContext.Provider>
@@ -49,6 +65,5 @@ export default function AuthProvider() {
 }
 
 export function useAuth() {
-
   return useContext(AuthContext);
 }
