@@ -1,10 +1,10 @@
-export interface IJotPayload {
+export interface IEditorState {
   id: string;
   name: string;
   content: string;
 }
 
-export interface IJotState {
-  jots: IJotPayload[];
+export interface IJotPayload {
+  jots: IEditorState[];
   description: string | null;
 }

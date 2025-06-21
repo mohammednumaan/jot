@@ -20,13 +20,14 @@ export async function apiGetRequest<ResponseType>(
 
 export async function apiPostRequest<PayloadType, ResponseType>(
   endpoint: string,
-  payload: PayloadType
+  payload: PayloadType,
+  method: string = 'POST',
 ): Promise<ResponseType> {
   try {
     const response = await fetch(
       `${import.meta.env.VITE_SERVER_URL}/${endpoint}`,
       {
-        method: "POST",
+        method: method,
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
         mode: "cors",
@@ -40,3 +41,5 @@ export async function apiPostRequest<PayloadType, ResponseType>(
     throw error;
   }
 }
+
+

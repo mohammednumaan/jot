@@ -7,18 +7,18 @@ export default function useFetch<T>(endpoint: string) {
   const [data, setData] = useState<T | null>(null);
   const [error, setError] = useState<string[] | null>(null);
   const [loading, setLoading] = useState(false);
+  const [refetch, setRefetch] = useState(false)
   
-  console.log(`useFetch hook call: data:${data}, loading:${loading}`);
-
+  
   
   useEffect(() => {
     async function getData() {
-
       setLoading(true);
       const response = await apiGetRequest<
         ApiErrorResponse | ApiSucessResponse<T>
       >(endpoint);
       if (response.success) {
+        console.log(response.data);
         
         setData(response.data);
         setError(null);
@@ -27,15 +27,17 @@ export default function useFetch<T>(endpoint: string) {
         setError(errors);
         setData(null);
       }
-      setLoading(false);
+      setTimeout(() => setLoading(false), 700)
     }
 
-    if (!data) getData();
-  }, [endpoint]);
+    
+    getData();
+  }, [refetch]);
 
   return {
     data,
     error,
     loading,
+    setRefetch
   };
 }
