@@ -2,12 +2,12 @@ import toast from "react-hot-toast";
 import useFetch from "../../core/hooks/fetch.hook";
 import { AllJotsResponse } from "../../core/types/jot/jots";
 import Editor from "../Editor/Editor";
-import JotSkeleton from "../Skeleton/Skeleton";
 import Pagination from "../Pagination/Pagination";
 import { useState } from "react";
 import { formatDistanceToNowStrict } from "date-fns";
 import { Link } from "react-router";
 import Button from "../Form/components/Button";
+import JotContainerSkeleton from "../Skeleton/JotContainerSkeleton";
 
 export default function Discover() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -48,8 +48,8 @@ export default function Discover() {
       )}
       {loading && !error && (
         <div className="flex flex-col gap-10">
-          {Array.from({ length: 5 }).map((_, index) => (
-            <JotSkeleton key={index} />
+          {Array.from({ length: 2 }).map((_, index) => (
+            <JotContainerSkeleton key={index} />
           ))}
         </div>
       )}
@@ -59,11 +59,8 @@ export default function Discover() {
           <p className=" text-4xl flex justify-center items-center">
             No Jots found. Start by creating one.
           </p>
-          <Link className="w-[57%]"
-            to="/create">
-            <Button imagePath="/public/icons/add_black.svg">
-              Create Jot
-            </Button>
+          <Link className="w-[57%]" to="/create">
+            <Button imagePath="/public/icons/add_black.svg">Create Jot</Button>
           </Link>
         </div>
       )}

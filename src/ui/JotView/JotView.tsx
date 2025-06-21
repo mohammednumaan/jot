@@ -18,7 +18,7 @@ import {
   ApiSucessResponse,
 } from "../../core/types/api/response";
 import { asyncResponseErrorHandler } from "../../core/errors/errors";
-import JotSkeleton from "../Skeleton/Skeleton";
+import JotContainerSkeleton from "../Skeleton/JotContainerSkeleton";
 
 export default function JotView() {
   const { username } = useAuth();
@@ -52,6 +52,7 @@ export default function JotView() {
       description: description,
     };
 
+    e.preventDefault();
     const response = await apiPostRequest<
       IJotPayload,
       ApiErrorResponse | ApiSucessResponse<IJotPayload>
@@ -83,7 +84,7 @@ export default function JotView() {
       {loading && !error && (
         <div className="flex flex-col gap-10">
           {Array.from({ length: data?.jots.length || 5 }).map((_, index) => (
-            <JotSkeleton key={index} />
+            <JotContainerSkeleton key={index} />
           ))}
         </div>
       )}
