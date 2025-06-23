@@ -7,10 +7,8 @@ export default function useFetch<T>(endpoint: string) {
   const [data, setData] = useState<T | null>(null);
   const [error, setError] = useState<string[] | null>(null);
   const [loading, setLoading] = useState(false);
-  const [refetch, setRefetch] = useState(false)
-  
-  
-  
+  const [refetch, setRefetch] = useState(false);
+
   useEffect(() => {
     async function getData() {
       setLoading(true);
@@ -19,7 +17,7 @@ export default function useFetch<T>(endpoint: string) {
       >(endpoint);
       if (response.success) {
         console.log(response.data);
-        
+
         setData(response.data);
         setError(null);
       } else {
@@ -27,10 +25,9 @@ export default function useFetch<T>(endpoint: string) {
         setError(errors);
         setData(null);
       }
-      setTimeout(() => setLoading(false), 700)
+      setLoading(false);
     }
 
-    
     getData();
   }, [refetch]);
 
@@ -38,6 +35,6 @@ export default function useFetch<T>(endpoint: string) {
     data,
     error,
     loading,
-    setRefetch
+    setRefetch,
   };
 }

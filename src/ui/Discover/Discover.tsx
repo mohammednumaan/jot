@@ -125,7 +125,7 @@ export default function Discover() {
           ))}
       </div>
 
-      {loading && !error && data?.pagination && (
+      {!loading && !error && data?.pagination && (
         <div className="mt-5 mb-5">
           <Pagination
             page={currentPage}

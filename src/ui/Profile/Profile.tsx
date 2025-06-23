@@ -5,6 +5,7 @@ import { formatDistanceToNowStrict } from "date-fns";
 import { Link } from "react-router";
 import Button from "../Form/components/Button";
 import { AllJotsResponse } from "../../core/types/jot/jots";
+import YourJotsContainerSkeleton from "../Skeleton/YourJotsContainerSkeleton";
 
 export default function Profile() {
   const { username } = useAuth();
@@ -22,6 +23,7 @@ export default function Profile() {
 
   return (
     <div>
+      <p className="text-2xl text-[#543A8B] underline text-left mb-10">All Jots</p>
       {error && (
         <h1 className="h-[80vh] flex justify-center items-center">
           Could not fetch jots, please try again later.
@@ -31,8 +33,8 @@ export default function Profile() {
       {/* TODO: refactor this since its the same code as the one in discover with
          some components removed (like the editor component)
       */}
-      {data?.jots.length === 0 && (
-        <div className="h-[80vh] w-[100%] flex flex-col justify-center items-center gap-5">
+      {!loading && !error && data?.jots.length === 0 && (
+        <div className="h-[80vh] mt-[-80px] w-[100%] flex flex-col justify-center items-center gap-5">
           <p className=" text-4xl flex justify-center items-center">
             No Jots found. Start by creating one.
           </p>
@@ -41,9 +43,14 @@ export default function Profile() {
           </Link>
         </div>
       )}
+      {loading && !error && (
+        <div className="flex flex-col gap-10">
+          {Array.from({ length: 5 }).map((_, index) => (
+            <YourJotsContainerSkeleton key={index} />
+          ))}
+        </div>
+      )}
       <div className="flex justify-center items-center flex-col gap-5">
-        <p className="text-2xl text-[#543A8B]">All Jots</p>
-
         {!loading &&
           !error &&
           data?.jots &&
