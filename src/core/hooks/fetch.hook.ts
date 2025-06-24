@@ -9,17 +9,15 @@ export default function useFetch<T>(endpoint: string) {
   const [loading, setLoading] = useState(false);
   const [refetch, setRefetch] = useState(false);
 
-  console.log("render", loading, error, data, refetch)
   useEffect(() => {
     async function getData() {
-      
       setLoading(true);
       const response = await apiGetRequest<
-      ApiErrorResponse | ApiSucessResponse<T>
+        ApiErrorResponse | ApiSucessResponse<T>
       >(endpoint);
       if (response.success) {
         console.log(response.data);
-        
+
         console.log("uyseefeftc alled");
         setData(response.data);
         setError(null);
@@ -32,7 +30,7 @@ export default function useFetch<T>(endpoint: string) {
     }
 
     getData();
-  }, [refetch]);
+  }, [refetch, endpoint]);
 
   return {
     data,

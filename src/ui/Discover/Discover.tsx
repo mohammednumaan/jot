@@ -15,7 +15,6 @@ export default function Discover() {
     `jots/?page=${currentPage}`
   );
 
-
   if (error) {
     error.map((err) => toast(err));
   }
@@ -92,9 +91,12 @@ export default function Discover() {
                     </Link>
                   </div>
                   <p className="text-sm opacity-[0.6]">
-                    Created {formatDistanceToNowStrict(jot.createdAt)} ago
+                    Created {formatDistanceToNowStrict(jot.jotGroup.createdAt)}{" "}
+                    ago
                   </p>
-                  <p className="text-sm opacity-[0.6]">{jot.description}</p>
+                  <p className="text-sm opacity-[0.6]">
+                    {jot.jotGroup.description}
+                  </p>
                 </div>
 
                 {/* this is the right side of the header metadata */}

@@ -96,7 +96,7 @@ export default function JotView() {
         </div>
       )}
 
-      {jots?.length && jots.length > 0 && (
+      {!loading && !error && jots?.length && jots.length > 0 && (
         <div className="flex justify-between items-center">
           <div className="flex justify-center items-start flex-col mb-5">
             <div className="flex gap-2">
@@ -119,7 +119,7 @@ export default function JotView() {
             <p className="text-sm opacity-[0.6]">
               Created {formatDistanceToNowStrict(jots[0].createdAt)} ago
             </p>
-            <p className="text-sm opacity-[0.6]">{jots[0].description}</p>
+            <p className="text-sm opacity-[0.6]">{data?.jotGroup.description}</p>
           </div>
           <div className="flex items-center gap-2">
             {editable && (
