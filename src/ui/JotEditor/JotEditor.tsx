@@ -8,10 +8,12 @@ import { v4 as uuidv4 } from "uuid";
 interface JotEditorProps {
   existingEditorState?: IEditorState[];
   usedFor: "create" | "edit";
+  setEditable?: React.Dispatch<React.SetStateAction<boolean>>;
   handleSubmit: (
     e: MouseEvent<HTMLButtonElement>,
     editors: IEditorState[],
-    description: string
+    description: string,
+    setDisabled: React.Dispatch<React.SetStateAction<boolean>>
   ) => void;
   existingDescriptionState?: string;
 }
@@ -20,6 +22,7 @@ export default function JotEditor({
   usedFor,
   existingEditorState,
   existingDescriptionState,
+  setEditable,
 }: JotEditorProps) {
   const [editors, setEditors] = useState(
     existingEditorState || [
@@ -34,7 +37,7 @@ export default function JotEditor({
   const [description, setDescription] = useState(
     existingDescriptionState || ""
   );
-
+  const [disabled, setDisabled] = useState(false);
   const handleAddEditor = () => {
     const existingEditors = editors;
     const newEditor: IEditorState = {
@@ -127,7 +130,7 @@ export default function JotEditor({
                     }
                     handleTextChange={handleTextareaChange}
                     readonly={false}
-                    initialLineNumber={editor.content.split('\n').length || 1}
+                    initialLineNumber={editor.content.split("\n").length || 1}
                   />
                 </div>
               </div>
@@ -138,6 +141,7 @@ export default function JotEditor({
       <div className="flex justify-between items-center mt-4">
         <div className="w-full flex justify-start">
           <Button
+            disabled={disabled}
             onClick={handleAddEditor}
             width={"20%"}
             imagePath="/public/icons/add_black.svg"
@@ -145,13 +149,25 @@ export default function JotEditor({
             Add File
           </Button>
         </div>
-        <div className="w-full flex justify-end">
+        <div className="w-full flex justify-end gap-4">
           <Button
-            onClick={(e) => handleSubmit(e, editors, description)}
-            width={"20%"}
+            disabled={disabled}
+            onClick={(e) => handleSubmit(e, editors, description, setDisabled)}
+            width={"30%"}
+            imagePath="/public/icons/edit_icon.svg"
           >
             {usedFor === "create" ? "Create Jot" : "Update Jot"}
           </Button>
+          {usedFor === "edit" && setEditable && (
+            <Button
+              disabled={disabled}
+              onClick={() => setEditable(false)}
+              width={"30%"}
+              imagePath="/public/icons/cancel_edit.svg"
+            >
+              Cancel
+            </Button>
+          )}
         </div>
       </div>
     </>

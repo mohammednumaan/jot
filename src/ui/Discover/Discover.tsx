@@ -15,7 +15,6 @@ export default function Discover() {
     `jots/?page=${currentPage}`
   );
 
-  console.log(`discover component render: data:${data}, loading:${loading}`);
 
   if (error) {
     error.map((err) => toast(err));

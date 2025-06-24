@@ -1,4 +1,4 @@
-import { useParams } from "react-router";
+import { Link, useParams } from "react-router";
 import useFetch from "../../core/hooks/fetch.hook";
 import { GetJotGroupResponse } from "../../core/types/jot/get_jotGroup.types";
 import toast from "react-hot-toast";
@@ -19,6 +19,7 @@ import {
 } from "../../core/types/api/response";
 import { asyncResponseErrorHandler } from "../../core/errors/errors";
 import JotViewContainerSkeleton from "../Skeleton/JotViewContainerSkeleton";
+import { formatDistanceToNowStrict } from "date-fns";
 
 export default function JotView() {
   const { username } = useAuth();
@@ -37,7 +38,7 @@ export default function JotView() {
   // this maps the fetched jots to EditorState type objects
   // which is neccessary for the editor component
   let editors: IEditorState[] = [];
-  let description = data?.description || "";
+  let description = data?.jotGroup.description || "";
   if (data?.jots) {
     editors = mapToEditorState(data);
   }
@@ -45,7 +46,8 @@ export default function JotView() {
   const handleJotEditSubmit = async (
     e: MouseEvent<HTMLButtonElement>,
     editors: IEditorState[],
-    description: string
+    description: string,
+    setDisabled: React.Dispatch<React.SetStateAction<boolean>>
   ) => {
     const payload: IJotPayload = {
       jots: editors,
@@ -58,15 +60,20 @@ export default function JotView() {
       ApiErrorResponse | ApiSucessResponse<IJotPayload>
     >(`jots/edit/${jotGroupId}`, payload, "PUT");
 
+    setDisabled(true);
     if (!response.success) {
+      setDisabled(false);
+
       const errors = asyncResponseErrorHandler(response);
       for (const err of errors) {
         toast(err);
       }
     } else {
       toast.success("Jot updated successfully.");
-      setRefetch(true);
-      setEditable(false);
+      setTimeout(() => {
+        setEditable(false);
+        setRefetch(true);
+      }, 2000);
     }
   };
 
@@ -88,31 +95,45 @@ export default function JotView() {
           ))}
         </div>
       )}
-      {username === name && !loading && !error && (
-        // this div contains options for the owner to edit/edit the jot
-        <div className=" flex justify-end items-center gap-2 mb-5">
-          {!editable ? (
-            <>
-              <Button
-                width="90%"
-                imagePath="/public/icons/edit_icon.svg"
-                onClick={() => setEditable(true)}
+
+      {jots?.length && jots.length > 0 && (
+        <div className="flex justify-between items-center">
+          <div className="flex justify-center items-start flex-col mb-5">
+            <div className="flex gap-2">
+              <Link
+                className="hover:underline"
+                to={`/profile/${data?.owner.name}`}
               >
-                Edit
-              </Button>
-              <Button width="90%" imagePath="/public/icons/delete_icon.svg">
-                Delete
-              </Button>
-            </>
-          ) : (
-            <Button
-              width="90%"
-              onClick={() => setEditable(false)}
-              imagePath="/public/icons/cancel_edit.svg"
-            >
-              Cancel
-            </Button>
-          )}
+                <p className="text-xl text-[#543A8B]">{data?.owner.name}</p>
+              </Link>
+              <p className="text-xl text-[#543A8B]">/</p>
+              <Link
+                className="hover:underline"
+                to={`/${data?.owner.name}/${data?.jotGroup.id}`}
+              >
+                <p className="text-xl text-[#543A8B]">
+                  {jots[0].name + "." + jots[0].extension}
+                </p>
+              </Link>
+            </div>
+            <p className="text-sm opacity-[0.6]">
+              Created {formatDistanceToNowStrict(jots[0].createdAt)} ago
+            </p>
+            <p className="text-sm opacity-[0.6]">{jots[0].description}</p>
+          </div>
+          <div className="flex items-center gap-2">
+            {editable && (
+              <>
+                <p className="text-sm opacity-[0.6]">Editing Jot</p>
+                <div className="relative">
+                  <span className="relative flex size-3">
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#543A8B] opacity-75"></span>
+                    <span className="relative inline-flex size-3 rounded-full bg-[#543A8B]"></span>
+                  </span>
+                </div>
+              </>
+            )}
+          </div>
         </div>
       )}
       {/* this is the jot filename header along with the content */}
@@ -157,9 +178,29 @@ export default function JotView() {
             existingEditorState={editors}
             existingDescriptionState={description}
             usedFor="edit"
+            setEditable={setEditable}
           />
         )}
       </div>
+      {username === name && !loading && !error && (
+        // this div contains options for the owner to edit/edit the jot
+        <div className=" flex justify-end items-center gap-2 mt-5">
+          {!editable && (
+            <>
+              <Button
+                width="10%"
+                imagePath="/public/icons/edit_icon.svg"
+                onClick={() => setEditable(true)}
+              >
+                Edit
+              </Button>
+              <Button width="10%" imagePath="/public/icons/delete_icon.svg">
+                Delete
+              </Button>
+            </>
+          )}
+        </div>
+      )}
     </div>
   );
 }

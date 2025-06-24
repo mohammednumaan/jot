@@ -18,9 +18,12 @@ export default function CreateJot() {
   const handleJotSubmit = async (
     e: MouseEvent<HTMLButtonElement>,
     editors: IEditorState[],
-    description: string
+    description: string,
+    setDisabled: React.Dispatch<React.SetStateAction<boolean>>
   ) => {
     e.preventDefault();
+    setDisabled(true)
+    console.log("diabled is false")
     const payload: IJotPayload = {
       jots: editors,
       description: description,
@@ -33,6 +36,7 @@ export default function CreateJot() {
 
     if (!response.success) {
       const errors = asyncResponseErrorHandler(response);
+      setDisabled(false)
       for (const err of errors) {
         toast(err);
       }
