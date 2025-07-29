@@ -13,7 +13,7 @@ import {
   ApiErrorResponse,
   ApiSucessResponse,
 } from "../../../core/types/api/response";
-import { apiPostRequest } from "../../../core/utils/request.utils";
+import { apiPutOrPostRequest } from "../../../core/utils/request.utils";
 import { asyncResponseErrorHandler } from "../../../core/errors/errors";
 import toast from "react-hot-toast";
 import { useAuth } from "../../../core/context/auth.context";
@@ -42,7 +42,7 @@ export default function Login() {
       username: formData.username,
       password: formData.password,
     };
-    const response = await apiPostRequest<
+    const response = await apiPutOrPostRequest<
       LoginPayloadType,
       ApiErrorResponse | ApiSucessResponse<ILoginResponse>
     >("auth/login", payload);

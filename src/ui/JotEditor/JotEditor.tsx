@@ -13,7 +13,8 @@ interface JotEditorProps {
     e: MouseEvent<HTMLButtonElement>,
     editors: IEditorState[],
     description: string,
-    setDisabled: React.Dispatch<React.SetStateAction<boolean>>
+    setDisabled: React.Dispatch<React.SetStateAction<boolean>>,
+    deleted?: string[],
   ) => void;
   existingDescriptionState?: string;
 }
@@ -38,6 +39,8 @@ export default function JotEditor({
     existingDescriptionState || ""
   );
   const [disabled, setDisabled] = useState(false);
+  const [deleted, setDeleted] = useState<string[]>([]);
+
   const handleAddEditor = () => {
     const existingEditors = editors;
     const newEditor: IEditorState = {
@@ -70,6 +73,13 @@ export default function JotEditor({
 
     setEditors(newEditors);
     setSelectedJot(updatedEditor);
+  };
+
+  const handleDeleteFile = (fileId: string) => {
+    const updatedDeletedList = [...deleted, fileId];
+    const filteredList = editors.filter((editor) => editor.id !== fileId);
+    setEditors(filteredList);
+    setDeleted(updatedDeletedList);
   };
 
   const handleTextareaChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -106,7 +116,7 @@ export default function JotEditor({
                 key={editor.id}
               >
                 <div className="flex justify-start items-center">
-                  <div>
+                  <div className="flex gap-2">
                     <InputField
                       name="name"
                       value={
@@ -117,6 +127,17 @@ export default function JotEditor({
                       placeholder={"Filename with extension."}
                       onChange={handleInputChange}
                     />
+                    {editors.length >= 2 && (
+                      <button
+                        onClick={() => handleDeleteFile(editor.id)}
+                        className="bg-[#1b1b1b]"
+                      >
+                        <img
+                          src={"/public/icons/delete_file.svg"}
+                          alt="delete file icon"
+                        />
+                      </button>
+                    )}
                   </div>
                 </div>
 
@@ -152,7 +173,9 @@ export default function JotEditor({
         <div className="w-full flex justify-end gap-4">
           <Button
             disabled={disabled}
-            onClick={(e) => handleSubmit(e, editors, description, setDisabled)}
+            onClick={(e) =>
+              handleSubmit(e, editors, description, setDisabled, deleted)
+            }
             width={"30%"}
             imagePath="/public/icons/edit_icon.svg"
           >

@@ -1,18 +1,18 @@
-import toast from "react-hot-toast";
-import useFetch from "../../core/hooks/fetch.hook";
-import { AllJotsResponse } from "../../core/types/jot/jots";
-import Editor from "../Editor/Editor";
-import Pagination from "../Pagination/Pagination";
 import { useState } from "react";
 import { formatDistanceToNowStrict } from "date-fns";
 import { Link } from "react-router";
 import Button from "../Form/components/Button";
 import JotContainerSkeleton from "../Skeleton/JotContainerSkeleton";
+import { AllJotsResponse } from "../../core/types/jot/jots";
+import useFetch from "../../core/hooks/fetch.hook";
+import toast from "react-hot-toast";
+import Editor from "../Editor/Editor";
+import Pagination from "../Pagination/Pagination";
 
 export default function Discover() {
   const [currentPage, setCurrentPage] = useState(1);
   const { data, loading, error } = useFetch<AllJotsResponse>(
-    `jots/?page=${currentPage}`
+    `jots?page=${currentPage}`
   );
 
   if (error) {
@@ -125,8 +125,7 @@ export default function Discover() {
             </div>
           ))}
       </div>
-
-      {!loading && !error && data?.pagination && (
+      {!loading && !error && data?.jots && data.jots.length > 0 && (
         <div className="mt-5 mb-5">
           <Pagination
             page={currentPage}

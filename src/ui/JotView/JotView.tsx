@@ -1,4 +1,4 @@
-import { Link, useParams } from "react-router";
+import { Link, useNavigate, useParams } from "react-router";
 import useFetch from "../../core/hooks/fetch.hook";
 import { GetJotGroupResponse } from "../../core/types/jot/get_jotGroup.types";
 import toast from "react-hot-toast";
@@ -11,8 +11,12 @@ import mapToEditorState from "../../core/utils/map_to_editor_state.utils";
 import {
   IEditorState,
   IJotPayload,
+  IJotUpdatePayload,
 } from "../../core/types/jot/create_jot.types";
-import { apiPostRequest } from "../../core/utils/request.utils";
+import {
+  apiDeleteRequest,
+  apiPutOrPostRequest,
+} from "../../core/utils/request.utils";
 import {
   ApiErrorResponse,
   ApiSucessResponse,
@@ -22,6 +26,8 @@ import JotViewContainerSkeleton from "../Skeleton/JotViewContainerSkeleton";
 import { formatDistanceToNowStrict } from "date-fns";
 
 export default function JotView() {
+  const navigate = useNavigate();
+  const [disabled, setDisabled] = useState(false);
   const { username } = useAuth();
   const { name, jotGroupId } = useParams();
   const { data, loading, error, setRefetch } = useFetch<GetJotGroupResponse>(
@@ -47,22 +53,25 @@ export default function JotView() {
     e: MouseEvent<HTMLButtonElement>,
     editors: IEditorState[],
     description: string,
-    setDisabled: React.Dispatch<React.SetStateAction<boolean>>
+    disableEditorButtons: React.Dispatch<React.SetStateAction<boolean>>,
+    deleted?: string[],
   ) => {
-    const payload: IJotPayload = {
+    setRefetch(false)
+    const payload: IJotUpdatePayload = {
       jots: editors,
       description: description,
+      deleted: deleted || [],
     };
 
     e.preventDefault();
-    const response = await apiPostRequest<
+    const response = await apiPutOrPostRequest<
       IJotPayload,
       ApiErrorResponse | ApiSucessResponse<IJotPayload>
-    >(`jots/edit/${jotGroupId}`, payload, "PUT");
+    >(`jots/${jotGroupId}`, payload, "PUT");
 
-    setDisabled(true);
+    disableEditorButtons(true);
     if (!response.success) {
-      setDisabled(false);
+      disableEditorButtons(false);
 
       const errors = asyncResponseErrorHandler(response);
       for (const err of errors) {
@@ -74,6 +83,21 @@ export default function JotView() {
         setEditable(false);
         setRefetch(true);
       }, 2000);
+    }
+  };
+
+  const handleDeleteJot = async () => {
+    setDisabled(true);
+    const response = await apiDeleteRequest<
+      ApiErrorResponse | ApiSucessResponse<null>
+    >(`jots/${jotGroupId}`);
+    if (response) {
+      toast("Deleted Jot Successfully, Redirecting to discover page...");
+
+      setTimeout(() => navigate("/discover"), 1000);
+    } else {
+      toast("Something went wrong");
+      setDisabled(false);
     }
   };
 
@@ -119,7 +143,9 @@ export default function JotView() {
             <p className="text-sm opacity-[0.6]">
               Created {formatDistanceToNowStrict(jots[0].createdAt)} ago
             </p>
-            <p className="text-sm opacity-[0.6]">{data?.jotGroup.description}</p>
+            <p className="text-sm opacity-[0.6]">
+              {data?.jotGroup.description}
+            </p>
           </div>
           <div className="flex items-center gap-2">
             {editable && (
@@ -149,13 +175,14 @@ export default function JotView() {
                 key={index}
                 className="min-h-[5vh] w-full flex justify-between items-center p-3 bg-[#080808] rounded-tr-md rounded-tl-md"
               >
-                <div className="flex gap-2">
+                <div className="flex items-center gap-2">
                   <img
                     src={"/public/icons/code_block.svg"}
                     alt="code block icon"
                   />
                   <p>{jot.name + "." + jot.extension}</p>
                 </div>
+
                 <button
                   onClick={() => handleCopy(jot.content)}
                   className="bg-[#1b1b1b] hover:text-black hover:bg-[#e9dcf8] transition duration-500 ease-in-out rounded-2xl text-sm"
@@ -188,13 +215,19 @@ export default function JotView() {
           {!editable && (
             <>
               <Button
+                disabled={disabled}
                 width="10%"
                 imagePath="/public/icons/edit_icon.svg"
                 onClick={() => setEditable(true)}
               >
                 Edit
               </Button>
-              <Button width="10%" imagePath="/public/icons/delete_icon.svg">
+              <Button
+                disabled={disabled}
+                onClick={handleDeleteJot}
+                width="10%"
+                imagePath="/public/icons/delete_icon.svg"
+              >
                 Delete
               </Button>
             </>

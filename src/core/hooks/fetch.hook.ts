@@ -16,9 +16,6 @@ export default function useFetch<T>(endpoint: string) {
         ApiErrorResponse | ApiSucessResponse<T>
       >(endpoint);
       if (response.success) {
-        console.log(response.data);
-
-        console.log("uyseefeftc alled");
         setData(response.data);
         setError(null);
       } else {

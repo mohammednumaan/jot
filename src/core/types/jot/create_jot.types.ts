@@ -8,3 +8,7 @@ export interface IJotPayload {
   jots: IEditorState[];
   description: string | null;
 }
+
+export interface IJotUpdatePayload extends IJotPayload {
+  deleted: string[];
+}

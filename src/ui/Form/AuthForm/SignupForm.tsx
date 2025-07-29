@@ -9,7 +9,7 @@ import {
   ISignupState,
   SignupPayloadType,
 } from "../../../core/types/auth/signup.types";
-import { apiPostRequest } from "../../../core/utils/request.utils";
+import { apiPutOrPostRequest } from "../../../core/utils/request.utils";
 import {
   ApiErrorResponse,
   ApiSucessResponse,
@@ -43,17 +43,17 @@ export default function Signup() {
       confirm_password: formData.confirm_password,
     };
 
-    const response = await apiPostRequest<
+    const response = await apiPutOrPostRequest<
       SignupPayloadType,
       ApiErrorResponse | ApiSucessResponse<ISignupResponse>
     >("auth/signup", payload);
 
-    if (!response.success){
+    if (!response.success) {
       const errors = asyncResponseErrorHandler(response);
-      for (const err of errors){
-        toast(err)
+      for (const err of errors) {
+        toast(err);
       }
-    } else{
+    } else {
       navigate("/login");
     }
   };

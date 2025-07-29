@@ -18,10 +18,10 @@ export async function apiGetRequest<ResponseType>(
   }
 }
 
-export async function apiPostRequest<PayloadType, ResponseType>(
+export async function apiPutOrPostRequest<PayloadType, ResponseType>(
   endpoint: string,
   payload: PayloadType,
-  method: string = 'POST',
+  method: string = "POST"
 ): Promise<ResponseType> {
   try {
     const response = await fetch(
@@ -42,4 +42,20 @@ export async function apiPostRequest<PayloadType, ResponseType>(
   }
 }
 
+export async function apiDeleteRequest<ResponseType>(endpoint: string) {
+  try {
+    const response = await fetch(
+      `${import.meta.env.VITE_SERVER_URL}/${endpoint}`,
+      {
+        method: "DELETE",
+        mode: "cors",
+        credentials: "include",
+      }
+    );
 
+    const responseData: ResponseType = await response.json();
+    return responseData;
+  } catch (error) {
+    throw error;
+  }
+}

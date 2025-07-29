@@ -3,7 +3,7 @@ import {
   IEditorState,
   IJotPayload,
 } from "../../core/types/jot/create_jot.types";
-import { apiPostRequest } from "../../core/utils/request.utils";
+import { apiPutOrPostRequest } from "../../core/utils/request.utils";
 import {
   ApiErrorResponse,
   ApiSucessResponse,
@@ -29,10 +29,10 @@ export default function CreateJot() {
       description: description,
     };
 
-    const response = await apiPostRequest<
+    const response = await apiPutOrPostRequest<
       IJotPayload,
       ApiErrorResponse | ApiSucessResponse<IJotPayload>
-    >("jots/create", payload);
+    >("jots/", payload);
 
     if (!response.success) {
       const errors = asyncResponseErrorHandler(response);

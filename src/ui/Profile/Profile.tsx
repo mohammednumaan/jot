@@ -23,7 +23,9 @@ export default function Profile() {
 
   return (
     <div>
-      <p className="text-2xl text-[#543A8B] underline text-left mb-10">All Jots</p>
+      <p className="text-2xl text-[#543A8B] underline text-left mb-10">
+        All Jots
+      </p>
       {error && (
         <h1 className="h-[80vh] flex justify-center items-center">
           Could not fetch jots, please try again later.
@@ -84,7 +86,9 @@ export default function Profile() {
                   <p className="text-sm opacity-[0.6]">
                     Updated {formatDistanceToNowStrict(jot.updatedAt)} ago
                   </p>
-                  <p className="text-sm opacity-[0.6]">{jot.description}</p>
+                  <p className="text-sm opacity-[0.6]">
+                    {jot.jotGroup.description}
+                  </p>
                 </div>
 
                 {/* this is the right side of the header metadata */}
