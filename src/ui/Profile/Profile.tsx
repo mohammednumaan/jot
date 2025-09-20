@@ -1,16 +1,15 @@
 import toast from "react-hot-toast";
 import useFetch from "../../core/hooks/fetch.hook";
-import { useAuth } from "../../core/context/auth.context";
 import { formatDistanceToNowStrict } from "date-fns";
-import { Link } from "react-router";
+import { Link, useParams } from "react-router";
 import Button from "../Form/components/Button";
 import { AllJotsResponse } from "../../core/types/jot/jots";
 import YourJotsContainerSkeleton from "../Skeleton/YourJotsContainerSkeleton";
 
 export default function Profile() {
-  const { username } = useAuth();
+  const { name } = useParams();
   const { data, loading, error } = useFetch<AllJotsResponse>(
-    `user/${username}/jots`
+    `user/${name}/jots`
   );
 
   if (error) {
@@ -69,7 +68,7 @@ export default function Profile() {
                   <div className="flex gap-2">
                     <Link
                       className="hover:underline"
-                      to={`/profile/${jot.owner.id}`}
+                      to={`/profile/${jot.owner.name}`}
                     >
                       <p className="text-xl text-[#543A8B]">{jot.owner.name}</p>
                     </Link>

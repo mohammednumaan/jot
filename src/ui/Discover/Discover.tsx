@@ -76,7 +76,7 @@ export default function Discover() {
                   <div className="flex gap-2">
                     <Link
                       className="hover:underline"
-                      to={`/profile/${jot.owner.id}`}
+                      to={`/profile/${jot.owner.name}`}
                     >
                       <p className="text-xl text-[#543A8B]">{jot.owner.name}</p>
                     </Link>

@@ -1,6 +1,8 @@
 import { Link } from "react-router";
+import { useAuth } from "../../core/context/auth.context";
 
 export default function Navigation() {
+  const { username } = useAuth(); 
   return (
     <div className="flex justify-between items-center p-5 bg-[#080808] rounded-xl mb-10">
       <div>
@@ -20,7 +22,7 @@ export default function Navigation() {
           </Link>
         </div>
         <div title="View Profile">
-          <Link to="/profile">
+          <Link to={`/profile/${username}`}>
             <img src="/public/icons/profile_circle.svg" />
           </Link>
         </div>
